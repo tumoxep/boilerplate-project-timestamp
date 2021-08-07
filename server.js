@@ -24,7 +24,7 @@ app.get("/api?/:date?", function (req, res) {
   let { date } = req.params;
   if (date) {
     date = decodeURI(date);
-    if (!date.length === `${Number.parseInt(date)}`.length) { // hack to check if timestamp
+    if (date.length === `${Number.parseInt(date)}`.length) { // hack to check if timestamp
       date = Number.parseInt(date);
     }
     date = new Date(date);
