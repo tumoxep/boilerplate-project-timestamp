@@ -20,12 +20,21 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint... 
-app.get("/api/:date", function (req, res) {
+app.get("/api?/:date?", function (req, res) {
   let { date } = req.params;
-  if (!date.includes('-')) {
-    date = Number.parseInt(date);
+  if (date) {
+    date = decodeURI(date);
+    if (!date.length === `${Number.parseInt(date)}`.length) { // hack to check if timestamp
+      date = Number.parseInt(date);
+    }
+    date = new Date(date);
+  } else {
+    date = new Date();
   }
-  date = new Date(date);
+  if (date.toString() === 'Invalid Date') {
+    res.json({ error: 'Invalid Date' });
+    return;    
+  }
   res.json({
     unix: date.valueOf(),
     utc: date.toUTCString(),
